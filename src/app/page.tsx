@@ -11,6 +11,8 @@ export default function Home() {
   const [shortURL, setShortURL] = useState('');
   const [qrCode, setQrCode] = useState('');
   const { Image } = useQRCode();
+  const [fullShortURL, setFullShortURL] = useState('');
+  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,9 +29,8 @@ export default function Home() {
 
     if (res.ok) {
       setShortURL(data.shortURL);
-      setQrCode(data.qrCode); // Set the base64 QR code
-    } else {
-      alert(data.message || 'Failed to shorten the URL');
+      setFullShortURL(data.fullShortURL);
+      setQrCode(data.qrCode);
     }
   };
 
@@ -47,14 +48,20 @@ export default function Home() {
       </form>
 
       {shortURL && (
-        <div className="mt-6">
-          <p className="font-semibold">Shortened URL:</p>
-          <a href={`/${longURL}`} className="text-blue-500">{shortURL}</a>
-        </div>
-      )}
+  <div className="mt-6">
+    <p className="font-semibold">Shortened URL:</p>
+    <a href={fullShortURL} className="text-blue-500" target="_blank" rel="noopener noreferrer">
+  {fullShortURL}
+</a>
+
+  </div>
+)}
+
 
       {qrCode && (
-        <div className="mt-6">
+        <div className="flex justify-center mt-6">
+
+        <div className="mx-auto">
            <Image
       text={longURL}
       options={{
@@ -69,9 +76,10 @@ export default function Home() {
           light: '#FFBF60FF',
         },
       }}
-    />
+      />
 
         </div>
+      </div>
       )}
     </div>
   );
