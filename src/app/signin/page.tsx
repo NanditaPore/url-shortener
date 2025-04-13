@@ -23,6 +23,7 @@ export default function SignIn() {
     if (res.ok) {
       alert('Login successful!');
       console.log(data);
+      console.log(data.username);
       localStorage.setItem('token', data.token);
       localStorage.setItem('username', data.username);
       localStorage.setItem('userId', data.userId);

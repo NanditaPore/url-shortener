@@ -6,15 +6,12 @@ import jwt from 'jsonwebtoken';
 export async function POST(req: Request) {
   try {
     const { username, password } = await req.json();
-
-    // Find user
     const user = await prisma.user.findUnique({ where: { username } });
 
     if (!user) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {

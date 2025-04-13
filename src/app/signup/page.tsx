@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { redirect } from 'next/navigation';
 
 export default function SignUp() {
   const [username, setUsername] = useState('');
@@ -19,6 +20,7 @@ export default function SignUp() {
 
     if (res.ok) {
       alert('Signup successful!');
+      redirect('/signin');
       // Optionally redirect to login
     } else {
       alert(data.message || 'Signup failed');

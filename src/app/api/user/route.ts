@@ -1,4 +1,3 @@
-// pages/api/user.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import jwt from 'jsonwebtoken';
 import { prisma } from '@/lib/prisma';
@@ -19,9 +18,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Decode JWT
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { userId: string; username: string };
 
-    // Fetch user from DB using decoded userId
+    
     const user = await prisma.user.findUnique({
-      where: { id: decoded.userId },
+      where: { id: Number(decoded.userId) },  
       select: { username: true },
     });
 

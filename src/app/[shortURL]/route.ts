@@ -5,20 +5,21 @@ export async function GET(
   req: Request,
   { params }: { params: { shortURL: string } }
 ) {
-  try {
-    const { shortURL } = params;
+  const { shortURL } = params;
 
-    const urlRecord = await prisma.shortenedURL.findUnique({
+  try {
+    const record = await prisma.shortenedURL.update({
       where: { shortURL },
+      data: { visitCount: { increment: 1 } },
     });
 
-    if (!urlRecord) {
-      return NextResponse.redirect(new URL('/', req.url)); // redirect to homepage if not found
+    if (!record) {
+      return NextResponse.json({ error: 'Short URL not found' }, { status: 404 });
     }
 
-    return NextResponse.redirect(urlRecord.originalURL);
+    return NextResponse.redirect(record.originalURL);
   } catch (error) {
-    console.error('Error during redirection:', error);
-    return NextResponse.redirect(new URL('/', req.url));
+    console.error('Redirection error:', error);
+    return NextResponse.json({ error: 'Failed to redirect' }, { status: 500 });
   }
 }
